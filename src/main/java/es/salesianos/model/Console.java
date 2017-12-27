@@ -28,8 +28,8 @@ public class Console {
 		return idCompany;
 	}
 
-	public void setIdCompany(String IdEmpresa) {
-		this.idCompany = IdEmpresa;
+	public void setIdCompany(String IdCompany) {
+		this.idCompany = IdCompany;
 	}
 
 }

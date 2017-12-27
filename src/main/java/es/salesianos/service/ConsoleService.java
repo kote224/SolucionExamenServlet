@@ -6,19 +6,20 @@ import es.salesianos.assembler.ConsolaAssembler;
 import es.salesianos.connection.ConnectionH2;
 import es.salesianos.connection.ConnectionManager;
 import es.salesianos.model.Consola;
+import es.salesianos.model.Console;
 
-public class ConsolaService implements Service {
+public class ConsoleService implements Service {
 
-	ConsolaAssembler assembler = new ConsolaAssembler();
+	ConsoleService assembler = new ConsoleService();
 	private ConnectionManager manager = new ConnectionH2();
 
 	public void createNewUserFromRequest(HttpServletRequest req) {
-		Consola consola = assembler.createUserFromRequest(req);
+		Console console = assembler.createUserFromRequest(req);
 
-		if (!getManager().search(consola).isPresent()) {
-			getManager().insertConsola(consola);
+		if (!getManager().search(console).isPresent()) {
+			getManager().insertConsole(console);
 		} else {
-			getManager().update(consola);
+			getManager().update(console);
 		}
 	}
 

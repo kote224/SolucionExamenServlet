@@ -7,7 +7,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class Videojuegos {
+public class Videogame {
 	String console;
 	String videogame;
 	Date launch;
@@ -25,8 +25,8 @@ public class Videojuegos {
 		return videogame;
 	}
 
-	public void setTittle(String videojuego) {
-		this.videogame = videojuego;
+	public void setTittle(String videogame) {
+		this.videogame = videogame;
 	}
 	
 	
@@ -34,9 +34,9 @@ public class Videojuegos {
 		return launch;
 	}
 
-	public void setLanzamiento(String lanzamiento) {
+	public void setLanzamiento(String launch) {
 		try {
-			this.launch = sdf.parse(lanzamiento);
+			this.launch = sdf.parse(launch);
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}
@@ -50,12 +50,12 @@ public class Videojuegos {
 		this.edad = edad;
 	}
 	
-	public String getConsola() {
+	public String getConsole() {
 		return console;
 	}
 
-	public void setConsola(String consola) {
-		this.console = consola;
+	public void setConsole(String console) {
+		this.console = console;
 	}
 
 }

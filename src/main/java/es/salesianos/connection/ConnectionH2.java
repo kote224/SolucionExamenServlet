@@ -11,21 +11,24 @@ import java.util.List;
 import java.util.Optional;
 
 import es.salesianos.model.Videojuegos;
+import es.salesianos.model.Company;
 import es.salesianos.model.Consola;
+import es.salesianos.model.Console;
 import es.salesianos.model.Empresa;
+import es.salesianos.model.Videogame;
 
 public class ConnectionH2 implements ConnectionManager {
 
 	private static final String jdbcUrl = "jdbc:h2:file:./src/main/resources/test;INIT=RUNSCRIPT FROM 'classpath:scripts/create.sql'";
 
-	public void insertConsola(Consola userFormulario) {
+	public void insertConsole(Console userFormulario) {
 		Connection conn = open(jdbcUrl);
 		PreparedStatement preparedStatement = null;
 		try {
 			preparedStatement = conn.prepareStatement("INSERT INTO CONSOLA (id,nombre,idEmpresa)" + "VALUES (?, ?, ?)");
 			preparedStatement.setString(1, userFormulario.getId());
-			preparedStatement.setString(2, userFormulario.getNombre());
-			preparedStatement.setString(3, userFormulario.getIdEmpresa());
+			preparedStatement.setString(2, userFormulario.getName());
+			preparedStatement.setString(3, userFormulario.getIdCompany());
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -37,14 +40,14 @@ public class ConnectionH2 implements ConnectionManager {
 		close(conn);
 	}
 	
-	public void insertEmpresa(Empresa empresa) {
+	public void insertCompany(Company company) {
 		Connection conn = open(jdbcUrl);
 		PreparedStatement preparedStatement = null;
 		try {
 			preparedStatement = conn.prepareStatement("INSERT INTO EMPRESA (id, nombre, fechaempresa)" + "VALUES (?,?,?)");
-			preparedStatement.setString(1, empresa.getNombre());
-			preparedStatement.setString(2, empresa.getId());
-			preparedStatement.setDate(3, new java.sql.Date( empresa.getFechaEmpresa().getTime()));
+			preparedStatement.setString(1, company.getName());
+			preparedStatement.setString(2, company.getId());
+			preparedStatement.setDate(3, new java.sql.Date( company.getCompanyDate().getTime()));
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -56,14 +59,14 @@ public class ConnectionH2 implements ConnectionManager {
 		close(conn);
 	}
 	
-	public void insertVideojuego(Videojuegos videojuegos) {
+	public void insertVideogame(Videogame videogame) {
 		Connection conn = open(jdbcUrl);
 		PreparedStatement preparedStatement = null;
 		try {
 			preparedStatement = conn.prepareStatement("INSERT INTO Videojuego (id, titulo, lanzamiento,edad)" + "VALUES (?,?,?,?)");
-			preparedStatement.setString(1, videojuegos.getId());
-			preparedStatement.setString(2, videojuegos.getTitulo());
-			preparedStatement.setDate(3, (java.sql.Date) videojuegos.getLanzamiento());
+			preparedStatement.setString(1, videogame.getId());
+			preparedStatement.setString(2, videogame.getTittle());
+			preparedStatement.setDate(3, (java.sql.Date) videogame.getLaunch());
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -130,23 +133,23 @@ public class ConnectionH2 implements ConnectionManager {
 		}
 	}
 //----------------------------------------------------------------------
-	public Optional<Consola> search(Consola consola) {
-		Consola consolas = null;
+	public Optional<Console> search(Console console) {
+		Console consolas = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		Connection conn = null;
 
 		try {
 			conn = open(jdbcUrl);
-			preparedStatement = conn.prepareStatement("SELECT * FROM CONSOLA WHERE id = ?");
-			preparedStatement.setString(1, consola.getId());
+			preparedStatement = conn.prepareStatement("SELECT * FROM CONSOLE WHERE id = ?");
+			preparedStatement.setString(1, console.getId());
 			resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
-				consolas = new Consola();
+				consolas = new Console();
 				consolas.setId(resultSet.getString("id"));
-				consolas.setNombre(resultSet.getString("nombre"));
-				consolas.setIdEmpresa(resultSet.getString("idEmpresa"));
+				consolas.setName(resultSet.getString("name"));
+				consolas.setIdCompany(resultSet.getString("idCompany"));
 			}
 
 		} catch (Exception e) {
@@ -163,23 +166,23 @@ public class ConnectionH2 implements ConnectionManager {
 	
 	
 	
-	public Optional<Empresa> search(Empresa empresa) {
-		Empresa empresas = null;
+	public Optional<Company> search(Company company) {
+		Company empresas = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		Connection conn = null;
 
 		try {
 			conn = open(jdbcUrl);
-			preparedStatement = conn.prepareStatement("SELECT * FROM EMPESA WHERE id = ?");
-			preparedStatement.setString(1, empresa.getId());
+			preparedStatement = conn.prepareStatement("SELECT * FROM COMPANY WHERE id = ?");
+			preparedStatement.setString(1, company.getId());
 			resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
-				empresas = new Empresa();
+				empresas = new Company();
 				empresas.setId(resultSet.getString("id"));
-				empresas.setNombre(resultSet.getString("nombre"));
-				empresas.setFechaEmpresa(resultSet.getString("fecEmpr"));
+				empresas.setName(resultSet.getString("name"));
+				empresas.setCompanyDate(resultSet.getString("dateComp"));
 			}
 
 		} catch (Exception e) {
@@ -194,24 +197,24 @@ public class ConnectionH2 implements ConnectionManager {
 
 	}
 	
-	public Optional<Videojuegos> search(Videojuegos videojuego) {
-		Videojuegos videojuegos = null;
+	public Optional<Videogame> search(Videogame videogames) {
+		Videogame videogame = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		Connection conn = null;
 
 		try {
 			conn = open(jdbcUrl);
-			preparedStatement = conn.prepareStatement("SELECT * FROM videojuegos WHERE id = ?");
-			preparedStatement.setString(1, videojuego.getId());
+			preparedStatement = conn.prepareStatement("SELECT * FROM videogames WHERE id = ?");
+			preparedStatement.setString(1, videogames.getId());
 			resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
-				videojuegos = new Videojuegos();
-				videojuegos.setId(resultSet.getString("id"));
-				videojuegos.setTitulo(resultSet.getString("nombre"));
-				videojuegos.setLanzamiento(resultSet.getString("fecEmpr"));
-				videojuegos.setEdad(resultSet.getString("edad"));
+				videogame = new Videogame();
+				videogame.setId(resultSet.getString("id"));
+				videogame.setTittle(resultSet.getString("nombre"));
+				videogame.setLanzamiento(resultSet.getString("fecEmpr"));
+				videogame.setEdad(resultSet.getString("edad"));
 			}
 
 		} catch (Exception e) {
@@ -222,22 +225,22 @@ public class ConnectionH2 implements ConnectionManager {
 			close(conn);
 		}
 
-		return Optional.ofNullable(videojuegos);
+		return Optional.ofNullable(videogame);
 
 	}
 	
 
-	public void update(Consola consola) {
+	public void update(Console console) {
 		Connection conn = null;
 		PreparedStatement preparedStatement = null;
 
 		try {
 			conn = open(jdbcUrl);
-			preparedStatement = conn.prepareStatement("UPDATE EMPRESA SET " + "nombre = ?, IdEmpresa = ? WHERE Id = ?");
+			preparedStatement = conn.prepareStatement("UPDATE Company SET " + "name = ?, IdCompany = ? WHERE Id = ?");
 
-			preparedStatement.setString(1, consola.getNombre());
-			preparedStatement.setString(2, consola.getIdEmpresa());
-			preparedStatement.setString(3, consola.getId());
+			preparedStatement.setString(1, console.getName());
+			preparedStatement.setString(2, console.getIdCompany());
+			preparedStatement.setString(3, console.getId());
 			preparedStatement.executeUpdate();
 
 
@@ -497,6 +500,18 @@ public class ConnectionH2 implements ConnectionManager {
 		}
 
 		return videojuegos;
+	}
+
+	@Override
+	public void insertConsola(es.salesianos.connection.Consola consola) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<es.salesianos.connection.Consola> listAllConsolasOrdenadass() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
